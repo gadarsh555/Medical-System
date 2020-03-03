@@ -1,0 +1,176 @@
+<% var loginerror;%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/jquery.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+<title>Registration Form</title>
+<style>
+    body {
+    background: #263238;
+    font-family: bariol;
+}
+.my-form{
+    padding: 20px;
+}
+.form-container {
+    background: #ECEFF1;
+    text-align: center;
+    width: 500px;
+    height: auto;
+    margin: 5% auto;
+}
+
+input {
+    padding: 15px;
+    font-size: larger;
+    margin: 5px;
+    border: 2px solid black;
+    width: 400px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background: #263238;
+    color: white;
+    transition: 1s;
+}
+input[type="submit"]:hover{
+    background: white;
+    border: 2px solid #263238;
+    color: #263238;
+}
+
+.hide
+{
+    display: none;
+}
+</style>
+    </head>
+    <body>
+    <br>
+    <div class="row" style="color:darkblue;margin-left:20%;font-size:x-large;">
+        <button class="col-sm-3" onclick="toggleDoctor()">Login Doctor</button>
+        <button class="col-sm-3" onclick="toggleReceptionist()">Login Receptionist</button>
+        <button class="col-sm-3" onclick="togglePharmacist()">Login Pharmacist</button>
+    </div>
+      <div style="margin-left: 37%;">
+         <h2 style="color: #ECEFF1;">Choose How you want to Login?</h2>
+      </div>
+      
+      <% if(loginerror) { %>
+        <div role="alert" style="color: #ECEFF1;margin-left:38%;font-size:x-large;"><%=  loginerror %></div>
+        <br>
+      <% } %>
+      
+    <div class="form-container hide" id="doctor">
+        <form method="POST"  action="/login?login=doctor" class="my-form">
+            <div class="form-branding">
+                <h2>Doctor Login</h2>
+            </div>
+            <div class="form-input-content">
+                <input type="text" name="user"  placeholder=" Email , Mobile Number or Username">
+            </div>
+            <div class="form-input-content">
+                <input type="password" name="password"  placeholder=" Password">
+            </div>
+            <div class="form-input-content">
+                <input type="submit" value="Submit" >
+            </div>
+            <div style="font-size:large;">
+                <a style="color: darkblue;" href="/">Not Registered? Click to Register</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-container hide" id="receptionist">
+        <form method="POST"  action="/login?login=receptionist" class="my-form">
+            <div class="form-branding">
+                <h2>Receptionist Login</h2>
+            </div>
+            <div class="form-input-content">
+                <input type="text" name="user"  placeholder=" Email , Mobile Number or Username">
+            </div>
+            <div class="form-input-content">
+                <input type="password" name="password"  placeholder=" Password">
+            </div>
+            <div class="form-input-content">
+                <input type="submit" value="Submit" >
+            </div>
+            <div style="font-size:large;">
+                <a style="color: darkblue;" href="/">Not Registered? Click to Register</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-container hide" id="pharmacist">
+        <form method="POST"  action="/login?login=pharmacist" class="my-form">
+            <div class="form-branding">
+                <h2>Pharmacist Login</h2>
+            </div>
+            <div class="form-input-content">
+                <input type="text" name="user"  placeholder=" Email , Mobile Number or Username">
+            </div>
+            <div class="form-input-content">
+                <input type="password" name="password"  placeholder=" Password">
+            </div>
+            <div class="form-input-content">
+                <input type="submit" value="Submit" >
+            </div>
+            <div style="font-size:large;">
+                <a style="color: darkblue;" href="/">Not Registered? Click to Register</a>
+            </div>
+        </form>
+    </div>
+    </body>
+    </html>
+
+<script>
+
+function toggleDoctor()
+{
+    if(document.getElementById('doctor').classList.contains('hide')){
+        document.getElementById('doctor').classList.toggle("hide");
+    }
+    if(!document.getElementById('receptionist').classList.contains('hide')){
+        document.getElementById('receptionist').classList.toggle("hide");
+    }
+    if(!document.getElementById('pharmacist').classList.contains('hide')){
+        document.getElementById('pharmacist').classList.toggle("hide");
+    }
+}
+
+function toggleReceptionist()
+{
+    
+    if(!document.getElementById('doctor').classList.contains('hide')){
+        document.getElementById('doctor').classList.toggle("hide");
+    }
+    if(document.getElementById('receptionist').classList.contains('hide')){
+        document.getElementById('receptionist').classList.toggle("hide");
+    }
+    if(!document.getElementById('pharmacist').classList.contains('hide')){
+        document.getElementById('pharmacist').classList.toggle("hide");
+    }
+}
+
+function togglePharmacist()
+{
+    
+    if(!document.getElementById('doctor').classList.contains('hide')){
+        document.getElementById('doctor').classList.toggle("hide");
+    }
+    if(!document.getElementById('receptionist').classList.contains('hide')){
+        document.getElementById('receptionist').classList.toggle("hide");
+    }
+    if(document.getElementById('pharmacist').classList.contains('hide')){
+        document.getElementById('pharmacist').classList.toggle("hide");
+    }
+}
+
+</script>

@@ -1,0 +1,223 @@
+<% var errors,present,formData; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+<script src="/javascripts/bootstrap.js"></script>
+<script src="/javascripts/jquery.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+<title>Registration Form</title>
+<style>
+    body {
+    background: #263238;
+    font-family: bariol;
+}
+.my-form{
+    padding: 20px;
+}
+.form-container {
+    background: #ECEFF1;
+    text-align: center;
+    width: 450px;
+    height: auto;
+    margin: 2% auto;
+}
+
+input {
+    padding: 15px;
+    font-size: larger;
+    margin: 5px;
+    border: 2px solid black;
+    width: 350px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background: #263238;
+    color: white;
+    transition: 1s;
+}
+input[type="submit"]:hover{
+    background: white;
+    border: 2px solid #263238;
+    color: #263238;
+}
+
+.hide
+{
+    display: none;
+}
+</style>
+    </head>
+    <body>
+    <br>
+    <div class="row" style="color:darkblue;margin-left:20%;font-size:x-large;">
+        <button class="col-sm-3" onclick="toggleDoctor()">Signup Doctor</button>
+        <button class="col-sm-3" onclick="toggleReceptionist()">Signup Receptionist</button>
+        <button class="col-sm-3" onclick="togglePharmacist()">Signup Pharmacist</button>
+    </div>
+      <div style="margin-left: 37%;">
+         <h2 style="color: #ECEFF1;">Choose How you want to signup?</h2>
+      </div>
+      <ul >
+        <% if(errors) { %>
+        <% errors.forEach(function(errors){ %>
+          <div style="color: #ECEFF1;margin-left:22%;font-size:x-large;"  role="alert"><%= errors.msg %></div>
+        <%});%>
+        <% } %>
+       </ul> 
+       <% if(present) { %>
+        <div role="alert" style="color: #ECEFF1;margin-left:22%;font-size:x-large;"><%= present %></div>
+      <% } %>
+    
+    
+    <div class="form-container hide" id="doctor">
+        <form method="POST"  action="/?register=doctor" enctype="multipart/form-data" class="my-form">
+            <div class="form-branding">
+                <h2>Doctor Signup</h2>
+            </div>
+            <div class="form-input-content">
+                <input type="text"  name="name" placeholder="Your Full Name"  <% if(formData){ %> value="<%- formData.name %>" <% } %> required autofocus>
+            </div>
+
+            <div class="form-input-content">
+                <input type="email"  name="email" placeholder="Your Email Address" 
+                <% if(formData){ %> value="<%- formData.email %>" <% } %> required autofocus>
+            </div>
+            <div class="form-input-content">
+                <input type="number" name="phone"  placeholder="Your Mobile Number" 
+                <% if(formData){ %> value="<%- formData.phone %>" <% } %>>
+            </div>
+            <div class="form-input-content">
+                <input type="text" name="username" placeholder="Your Username"  <% if(formData){ %> value="<%- formData.username %>" <% } %>>
+            </div>
+            <div class="form-input-content">
+                <input type="password" name="password"  placeholder="Choose A Password">
+            </div>
+            <div class="form-input-content" style="margin-left:6%;">
+                <input type="file" name="profileimage">
+            </div>
+            <div class="form-input-content">
+                <input type="submit" value="Submit" onclick="">
+            </div>
+            <div style="font-size:large;">
+                <a style="color: darkblue;" href="/login">Already Registered? Click to login</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-container hide" id="receptionist">
+        <form method="POST"  action="/?register=receptionist" enctype="multipart/form-data" class="my-form">
+            <div class="form-branding">
+                <h2>Receptionist Signup</h2>
+            </div>
+            <div class="form-input-content">
+                <input type="text"  name="name" placeholder="Your Full Name"  <% if(formData){ %> value="<%- formData.name %>" <% } %> required autofocus>
+            </div>
+
+            <div class="form-input-content">
+                <input type="email"  name="email" placeholder="Your Email Address"  <% if(formData){ %> value="<%- formData.email %>" <% } %> required autofocus>
+            </div>
+            <div class="form-input-content">
+                <input type="number" name="phone"  placeholder="Your Mobile Number"  <% if(formData){ %> value="<%- formData.phone %>" <% } %>>
+            </div>
+            <div class="form-input-content">
+                <input type="text" name="username" placeholder="Your Username"  <% if(formData){ %> value="<%- formData.username %>" <% } %>>
+            </div>
+            <div class="form-input-content">
+                <input type="password" name="password"  placeholder="Choose A Password"  <% if(formData){ %> value="<%- formData.password %>" <% } %>>
+            </div>
+            <div class="form-input-content" style="margin-left:6%;">
+                <input type="file" name="profileimage"  placeholder="Choose A Picture">
+            </div>
+            <div class="form-input-content">
+                <input type="submit" value="Submit" onclick="">
+            </div>
+            <div style="font-size:large;">
+                <a style="color: darkblue;" href="/login">Already Registered? Click to login</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-container hide" id="pharmacist">
+        <form method="POST"  action="/?register=pharmacist" enctype="multipart/form-data" class="my-form">
+            <div class="form-branding">
+                <h2>Pharmacist Signup</h2>
+            </div>
+            <div class="form-input-content">
+                <input type="text"  name="name" placeholder="Your Full Name" <% if(formData){ %> value="<%- formData.name %>" <% } %> required autofocus>
+            </div>
+
+            <div class="form-input-content">
+                <input type="email"  name="email" placeholder="Your Email Address" <% if(formData){ %> value="<%- formData.email %>" <% } %> required autofocus>
+            </div>
+            <div class="form-input-content">
+                <input type="number" name="phone"  placeholder="Your Mobile Number" <% if(formData){ %> value="<%- formData.phone %>" <% } %>>
+            </div>
+            <div class="form-input-content">
+                <input type="text" name="username" placeholder="Your Username" <% if(formData){ %> value="<%- formData.username %>" <% } %>>
+            </div>
+            <div class="form-input-content">
+                <input type="password" name="password"  placeholder="Choose A Password">
+            </div>
+            <div class="form-input-content" style="margin-left:6%;">
+                <input type="file" name="profileimage"  placeholder="Choose A Picture">
+            </div>
+            <div class="form-input-content">
+                <input type="submit" value="Submit" onclick="">
+            </div>
+            <div style="font-size:large;">
+                <a style="color: darkblue;" href="/login">Already Registered? Click to login</a>
+            </div>
+        </form>
+    </div>
+    </body>
+    </html>
+
+<script>
+
+function toggleDoctor()
+{
+    if(document.getElementById('doctor').classList.contains('hide')){
+        document.getElementById('doctor').classList.toggle("hide");
+    }
+    if(!document.getElementById('receptionist').classList.contains('hide')){
+        document.getElementById('receptionist').classList.toggle("hide");
+    }
+    if(!document.getElementById('pharmacist').classList.contains('hide')){
+        document.getElementById('pharmacist').classList.toggle("hide");
+    }
+}
+
+function toggleReceptionist()
+{
+    
+    if(!document.getElementById('doctor').classList.contains('hide')){
+        document.getElementById('doctor').classList.toggle("hide");
+    }
+    if(document.getElementById('receptionist').classList.contains('hide')){
+        document.getElementById('receptionist').classList.toggle("hide");
+    }
+    if(!document.getElementById('pharmacist').classList.contains('hide')){
+        document.getElementById('pharmacist').classList.toggle("hide");
+    }
+}
+
+function togglePharmacist()
+{
+    
+    if(!document.getElementById('doctor').classList.contains('hide')){
+        document.getElementById('doctor').classList.toggle("hide");
+    }
+    if(!document.getElementById('receptionist').classList.contains('hide')){
+        document.getElementById('receptionist').classList.toggle("hide");
+    }
+    if(document.getElementById('pharmacist').classList.contains('hide')){
+        document.getElementById('pharmacist').classList.toggle("hide");
+    }
+}
+
+</script>

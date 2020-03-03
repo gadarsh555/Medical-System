@@ -1,0 +1,210 @@
+<% var user; %>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="/stylesheets/bootstrap.css">
+    <script src="/javascripts/bootstrap.js"></script>
+    <script src="/javascripts/jquery.js"></script>
+
+    <title>Receptionist Profile</title>
+     <style>
+         body {
+  padding-top: 50px;
+   font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+ font-size: 16px;
+}
+
+
+
+.navbar { padding:10px 0; }
+.navbar-inverse { 
+  background-color: #1F6EA9; 
+  border: none; 
+  border-bottom: 2px solid white; 
+}
+
+.navbar-inverse .navbar-brand{
+  color: white;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 40px;
+}
+
+.navbar-inverse .navbar-brand:hover {
+  color: #17537F;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+  color: white;
+}
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover {
+  background-color: #17537F;
+}
+
+
+.banner {
+    background: url('http://cdn.supercell.com/supercell.com/151120111628/all/themes/supercell/img/parallax/coc_fallback_large.jpg');
+    background-repeat:no-repeat;
+    background-position: top center;
+    background-size: cover;
+height: 80%;
+ 
+}
+header .container {
+  padding-top: 100px;
+  padding-bottom:200px;
+  text-shadow:  2px 2px 0px rgba(150, 150, 150, 1);  
+}
+
+
+header .btn {
+  border-color: #1F6EA9;
+  background-color: white;
+  text-shadow: none;
+}
+
+.intro-text .naslov {
+  display: block;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 70px; 
+  color: white;
+}
+
+h2 {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 50px; 
+  color: #1F6EA9;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  
+}
+
+.ikonica {
+  font-size: 50px;
+  padding: 20px
+
+}
+.intro-text .tekst {
+color: white;
+  text-shadow:  1px 1px 15px rgba(0, 0, 0, 1);
+font-weight: bold;
+    padding: 30px 0;
+}
+
+
+
+hr.star-primary {
+    margin: 25px auto 30px;
+    padding: 0 0 30px 0; /* samo bottom ima padding */
+    max-width: 250px;
+    border: 0;
+    border-top: solid 5px;
+    text-align: center;
+     border-color: #1F6EA9;
+}
+
+hr.star-primary:after {
+    content: "\f005";
+    display: inline-block;
+    position: relative;
+    top: -.8em;
+    padding: 0 .25em;
+    font-family: FontAwesome;
+    font-size: 2em;
+  color: #1F6EA9;
+    background-color: #fff;
+}
+
+footer, #portfolio {
+  background-color: #EEEFEF;
+  padding: 30px 0;
+}
+
+#portfolio hr.star-primary:after {
+  background-color: #EEEFEF;
+}
+.dropbtn {
+  background-color:transparent;
+  color: white;
+  padding: 16px;
+  font-size: 17px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+     </style>
+  </head>
+
+  <body>
+      
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+         
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="/login/<%= user.username %>/regpatient?name=<%= user.name %>&profileimage=<%= user.profileimage %>&login=receptionist">Add New Patient</a></li>
+            <li><a href="#">Fix Appointement</a></li>
+            <li class="dropdown">
+                <% if(user){%>
+                <div class="dropbtn"><%= user[0].username %></div>
+                <% } %>
+                <div class="dropdown-content">
+                  <a href="#">Change Password</a>
+                  <a href="/login/<%= user[0].username %>/logout">Logout</a>
+                  <a href="#"></a>
+                </div>
+            </li>
+            
+          </ul>
+          <div class="row" style="margin-top: 10px;">
+          <a href="#" style="color:ivory;font-weight:400;text-decoration: none;">Medical System</a>
+        </div>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    
+    <div class="row" style="margin-top:2%;margin-left: 30%;font-size: xx-large;font-weight: 500;">Welcome to Medical Management System</div>
+    
+        <div style="margin:3%;">
+            <% if(user){%>
+            <img style="width:200px;height: 180px;" src="<%= user[0].profileimage %>">
+              <p><b><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;<%= user[0].name %></a></b></p>
+            <% } %>
+        </div>
+  </body>
+</html>
