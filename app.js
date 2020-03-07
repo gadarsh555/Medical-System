@@ -12,6 +12,9 @@ var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var doctorRouter = require('./routes/doctor');
+var receptionistRouter = require('./routes/receptionist');
+var pharmacistRouter = require('./routes/pharmacist');
 
 var app = express();
 
@@ -81,6 +84,9 @@ app.use(expressValidator({
 
 app.use('/', indexRouter);
 app.use('/login', usersRouter);
+app.use('/login', doctorRouter);
+app.use('/login', receptionistRouter);
+app.use('/login', pharmacistRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

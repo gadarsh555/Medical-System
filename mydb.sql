@@ -14,3 +14,8 @@ CREATE TABLE receptionist (username VARCHAR(10) UNIQUE NOT NULL,name VARCHAR(30)
 email VARCHAR(30) UNIQUE NOT NULL,phone VARCHAR(10) UNIQUE NOT NULL,password VARCHAR(30) NOT NULL,profileimage VARCHAR(100) NOT NULL,PRIMARY KEY (username));
 select * from receptionist;
 drop table receptionist;
+
+CREATE TABLE patient (username VARCHAR(20) UNIQUE NOT NULL,name VARCHAR(30) NOT NULL, 
+email VARCHAR(30) UNIQUE NOT NULL,phone VARCHAR(10) UNIQUE NOT NULL,dob VARCHAR(20) NOT NULL,profileimage VARCHAR(100) NOT NULL,PRIMARY KEY (username));
+select * from patient;
+drop table patient;

@@ -176,7 +176,8 @@ router.post('/', upload.single('profileimage'),function(req, res, next) {
                     console.log("fields",fields);
                     req.session.user = req.body;
                     var user = [req.body];
-                    res.render('docprofile',{user:user});
+                    /* res.render('docprofile',{user:user}); */
+                    res.redirect('/login/'+result[0].username+'/home?table=doctor');
                   });//inserting data in db doctor
             }//else 
          })
@@ -266,7 +267,8 @@ router.post('/', upload.single('profileimage'),function(req, res, next) {
                     console.log("fields",fields);
                     req.session.user = req.body;
                     var user = [req.body];
-                    res.render('recprofile',{user:user});
+                  /*   res.render('recprofile',{user:user}); */
+                  res.redirect('/login/'+result[0].username+'/home?table=receptionist');
                   });//inserting data in db doctor
             }//else 
          })
@@ -355,7 +357,8 @@ router.post('/', upload.single('profileimage'),function(req, res, next) {
                     console.log("fields",fields);
                     req.session.user = req.body;
                     var user = [req.body];
-                    res.render('pharprofile',{user:user});
+                    res.redirect('/login/'+result[0].username+'/home?table=pharmacist');
+                   /*  res.render('pharprofile',{user:user}); */
                   });//inserting data in db doctor
             }//else 
          })
@@ -385,7 +388,8 @@ router.post('/login',function(req,res){
             console.log("1 record found",result);
             console.log("fields",fields);
             req.session.user = result;
-            res.render('docprofile',{user:result});
+           /*  res.render('docprofile',{user:result}); */
+            res.redirect('/login/'+result[0].username+'/home?table=doctor');
           }
           else{
             res.render('login',{loginerror:"*Id or Password did not Matched !"});
@@ -403,7 +407,8 @@ router.post('/login',function(req,res){
             console.log("1 record found",result);
             console.log("fields",fields);
             req.session.user = result
-            res.render('recprofile',{user:result});
+           /*  res.render('recprofile',{user:result}); */
+           res.redirect('/login/'+result[0].username+'/home?table=receptionist');
           }
           else{
             res.render('login',{loginerror:"*Id or Password did not Matched !"});
@@ -421,7 +426,8 @@ router.post('/login',function(req,res){
             console.log("1 record found",result);
             console.log("fields",fields);
             req.session.user = result
-            res.render('pharprofile',{user:result});
+            /* res.render('pharprofile',{user:result}); */
+            res.redirect('/login/'+result[0].username+'/home?table=pharmacist');
           }
           else{
             res.render('login',{loginerror:"*Id or Password did not Matched !"});

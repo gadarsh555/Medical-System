@@ -176,24 +176,17 @@ footer, #portfolio {
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">Add New Patient</a></li>
+            <li><a href="/login/<%= user[0].username %>/home?table=doctor">Home</a></li>
+            <li> <a href="/login/<%= user[0].username %>/register">Register Patient</a></li>
             <li><a href="#portfolio">Fix Appointement</a></li>
-            <li class="dropdown">
-                <% if(user){%>
-                <div class="dropbtn"><%= user[0].username %></div>
-                <% } %>
-                <div class="dropdown-content">
-                  <a href="#">Change Password</a>
-                  <a href="/login/<%= user[0].username %>/logout">Logout</a>
-                  <a href="#"></a>
-                </div>
-            </li>
-            
+            <li> <a href="/login/<%= user[0].username %>/change?table=doctor">Change Password</a></li>
+              <% if(user){%>
+              <li> <a href="/login/<%= user[0].username %>/logout">Logout&nbsp;&nbsp;(<%= user[0].username %>)</a></li>
+              <% } %>           
           </ul>
           <div class="row" style="margin-top: 10px;">
           <a href="#" style="color:ivory;font-weight:400;text-decoration: none;">Medical System</a>
-        </div>
+          </div>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
