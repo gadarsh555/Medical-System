@@ -1,4 +1,4 @@
-<% var user,change,table,flag,form; %>
+<% var user,change,table,flag,form,appointment,search,date,slot,patient,email; %>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -207,6 +207,9 @@ footer, #portfolio {
                 <% if(status){ %>
                 <h3>&nbsp;<%= status %></h3>
                 <% } %>
+                <% if(email){ %>
+                    <div style="color: green;font-weight: 700;margin-left: 1%;" >*<%= email %></div>
+                    <% } %>
                 <% if(doctor){ %>
                     <% if(doctor.length > 0){ %>
                         <div class="col-sm-12">
@@ -219,30 +222,118 @@ footer, #portfolio {
                                         <div class="row" style="font-size:20px;font-weight:800;">Name :
                                             <%= doctor[i].name %>
                                         </div>
-                                        <% if(!form){ %>
+                                        <!-- searching for date -->
                                         <div class="row" style="font-size:20px;font-weight:800;">
-                                            <button style="margin-top:2%;" class="btn-primary"><a style="color:whitesmoke;text-decoration: none;" href="/login/<%= user[0].username %>/appointment?flag=0&username=<%= doctor[i].username %>&name=<%= doctor[i].name %>&profileimage=<%= doctor[i].profileimage %>">Fix Appointement</a></button>
+                                            <% if(search){ %>
+                                                   <form action="/login/<%= user[0].username %>/appointment?schedule=1&username=<%= doctor[i].username %>&name=<%= doctor[i].name %>&profileimage=<%= doctor[i].profileimage %>" method="post">
+                                                    <div class="form-group">
+                                                        <label >Enter Date:</label>
+                                                        <input type="date" name="date" class="form-control" id="date">
+                                                      </div>
+                                                      <button type="submit" class="btn btn-default">Submit</button>
+                                                    </form>
+                                                <% } %>
+                                        </div>
+                                        <!-- searching for date -->
+                                        <% if(!form && !appointment && !search){ %>
+                                        <div class="row" style="font-size:20px;font-weight:800;">
+                                            <button style="margin-top:2%;" class="btn-primary"><a style="color:whitesmoke;text-decoration: none;" href="/login/<%= user[0].username %>/appointment?search=1&username=<%= doctor[i].username %>&name=<%= doctor[i].name %>&profileimage=<%= doctor[i].profileimage %>">Fix Appointement</a></button>
                                         </div>
                                         <% } %>
                                     </div>
                                     <div class="col-sm-4"> <img style="width:200px;" src='<%= doctor[i].profileimage %>'></div>
                                 </div>
+                                  <!-- doctor's previous appointment-->
+                                  <% if(appointment){ %>
+                                    <div class="row" style="border-bottom:2px solid gray;margin:5px;padding:5px;">
+                                        
+                                       <div class="col-sm-3">
+                                        &nbsp;&nbsp; Time - Slot
+                                       </div>
+                                       <div class="col-sm-3">
+                                        Status
+                                       </div>
+                                       <div class="col-sm-3">
+                                        Date
+                                       </div>
+                                       <div class="col-sm-3">
+                                         Appointment
+                                       </div>
+                                    </div>
+                                       <% for(var i=0;i<appointment.length;i++){ %>
+                                        <div class="row" style="border-bottom:2px solid gray;margin:5px;padding:5px;">
+                                           <div class="col-sm-3">
+                                          *&nbsp; <%= appointment[i].slot %>
+                                           </div>
+                                           <div class="col-sm-3">
+                                            <%= appointment[i].status %>
+                                           </div>
+                                           <div class="col-sm-3">
+                                            <%= appointment[i].date %>
+                                           </div>
+                                           <div class="col-sm-3">
+                                            <button type="submit" class="btn btn-default">
+                                            <a href="/login/<%= user[0].username %>/appointment?form=1&slot=<%= appointment[i].slot %>&date=<%= appointment[i].date %>&username=<%= doctor[0].username %>&name=<%= doctor[0].name %>&profileimage=<%= doctor[0].profileimage %>"
+                                                <% if(appointment[i].status == "Fixed"){ %>
+                                                   style="pointer-events: none;
+                                                   cursor: default;color:darkgreen;"
+                                                <% } %>
+                                                >
+                                                <% if(appointment[i].status == "Fixed"){ %>
+                                                   Appointment Fixed
+                                                 <% } %>
+                                                <% if(appointment[i].status == "Free"){ %>
+                                                    Fix Appointment
+                                                <% } %>
+                                            
+                                            </a>
+                                        </button>
+                                           </div>
+                                        </div>
+                                       <% } %>
+                                    
+                                    <% } %>
+                                    <!-- doctor's previous appointment-->
+                                    
                                 <!-- form for fixing appointment-->
                                 <% if(form){ %>
                                 <div class="row" style="border-bottom:2px solid gray;margin:3px;padding:5px;">
-                                    <form action="/action_page.php">
+                                    <form action="/login/<%= user[0].username %>/appointment?form=1&username=<%= doctor[i].username %>&name=<%= doctor[i].name %>&profileimage=<%= doctor[i].profileimage %>" method="post">
+                                        <% if(date){ %>
+                                        <div class="form-group">
+                                            <label >Date :</label>
+                                            <input type="date" class="form-control" id="email" name="date"
+                                            value="<%= date %>" 
+                                            <% if(patient){%>
+                                                disabled
+                                              <% } %>
+                                            >
+                                          </div>
+                                          <% } %>
+                                          <% if(slot){ %>
+                                        <div class="form-group">
+                                            <label >Slot :</label>
+                                            <input type="text" class="form-control" id="email" name="slot" 
+                                             value="<%= slot %>"
+                                             <% if(patient){%>
+                                                disabled
+                                              <% } %>   
+                                              >
+                                          </div>
+                                          <% } %>
                                         <div class="form-group">
                                           <label for="email">Patient Id :</label>
-                                          <input type="email" class="form-control" id="email">
+                                          <input type="text" name="patient" class="form-control" id="email"
+                                          <% if(patient){%>
+                                            value="<%= patient %>" disabled
+                                          <% } %>      
+                                            >
                                         </div>
-                                        <div class="form-group">
-                                          <label for="pwd">Password:</label>
-                                          <input type="password" class="form-control" id="pwd">
-                                        </div>
-                                        <div class="checkbox">
-                                          <label><input type="checkbox"> Remember me</label>
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Submit</button>
+                                        <button type="submit" class="btn btn-primary"
+                                        <% if(patient){%>
+                                             disabled
+                                          <% } %> 
+                                        >Schedule</button>
                                       </form>
                                 </div>
                                 <% } %>

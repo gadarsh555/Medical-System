@@ -138,8 +138,9 @@ router.get('/:id/appointment',checkSignIn,function(err,req,res,next){
   res.redirect('/login');      
 },function(req,res){
 
-  if(req.query.flag == 1){
+  if(req.query.flag){
       var doctor = "SELECT * FROM doctor";
+      console.log(" reacvhed in flag --------------------------------------");
       con.query(doctor, function (err, result,fields) {
         if (err){
           console.log("error ocurrred",err);
@@ -155,15 +156,120 @@ router.get('/:id/appointment',checkSignIn,function(err,req,res,next){
         }//else
       });//finding search in doctor
  }//renderring to appointment page
- else{
+ else if(req.query.search){
+  console.log(" reacvhed in search --------------------------------------");
   result = [{
     "username" : req.query.username,
     "name"     : req.query.name,
     "profileimage" : req.query.profileimage
   }];
-  res.render('appointment',{user:req.session.user,doctor : result,form:1,status:"*Schedule an Appoinment"});
- }//else for flag
+  res.render('appointment',{user:req.session.user,doctor : result,search :1,status:"*Schedule an Appoinment"});
+ }//elseif for search
+
+ else if(req.query.form){
+  console.log(" reacvhed in form --------------------------------------");
+  result = [{
+    "username" : req.query.username,
+    "name"     : req.query.name,
+    "profileimage" : req.query.profileimage
+  }];
+  var slot = req.query.slot;
+  res.render('appointment',{user:req.session.user,slot:req.query.slot,date:req.query.date,doctor : result,form:1,status:"*Apply for Appoinment"});
+ }//elseif for form
 });
+
+router.post('/:id/appointment',checkSignIn,function(err,req,res,next){
+  console.log("i am inside appointment get");
+  console.log("error : ",err);
+  res.redirect('/login');      
+},function(req,res){
+
+   if(req.query.schedule){
+    console.log(" reacvhed in schedule --------------------------------------");
+   result = [{
+     "username" : req.query.username,
+     "name"     : req.query.name,
+     "profileimage" : req.query.profileimage
+   }];
+   var docId = req.query.username;
+   var find = "select * from appointment where doctor='"+docId+"' and  date='"+req.body.date+"' ";
+   con.query(find, function (err,slot,fields) {
+     if (err){
+       console.log("error ocurrred",err);
+       res.render('appointment',{user:req.session.user,doctor : result,search :1,status:"*Schedule an Appoinment"});
+     }
+     else if(slot.length == 12){
+       console.log("found search reesult already present: ",slot);
+       res.render('appointment',{user:req.session.user,appointment : slot,doctor : result,search :1,status:"*Fill the Form to Fix Appoinment"});
+     }//elseif
+     else{
+       console.log("no result found ");
+       var insert = "insert into appointment(slot,doctor,date,status) values('10:00 - 10:30','"+docId+"','"+req.body.date+"','Free'),('10:30 - 11:00','"+docId+"','"+req.body.date+"','Free'),('11:00 - 11:30','"+docId+"','"+req.body.date+"','Free'),('11:30 - 12:00','"+docId+"','"+req.body.date+"','Free'),('12:00 - 12:30','"+docId+"','"+req.body.date+"','Free'),('12:30 - 01:00','"+docId+"','"+req.body.date+"','Free'),('02:00 - 02:30','"+docId+"','"+req.body.date+"','Free'),('02:30 - 03:00','"+docId+"','"+req.body.date+"','Free'),('03:00 - 03:30','"+docId+"','"+req.body.date+"','Free'),('03:30 - 04:00','"+docId+"','"+req.body.date+"','Free'),('04:00 - 04:30','"+docId+"','"+req.body.date+"','Free'),('04:30 - 05:00','"+docId+"','"+req.body.date+"','Free')";
+       con.query(insert, function (err, slot2,fields) {
+         if (err){
+           console.log("error ocurrred in inserting 12 rows",err);
+           res.render('appointment',{user:req.session.user,doctor : result,search :1,status:"*Schedule an Appoinment"});
+         }
+         else{
+           console.log("12 rows insertrted succcessfully !");
+           var find2 = "select * from appointment where doctor='"+docId+"' and  date='"+req.body.date+"' ";
+           con.query(find2, function (err,slot3,fields) {
+             if (err){
+               console.log("error ocurrred",err);
+               res.render('appointment',{user:req.session.user,doctor : result,search :1,status:"*Schedule an Appoinment"});
+             }
+             else {
+               console.log("found search reesult--------------------- : ",slot3);
+               res.render('appointment',{user:req.session.user,appointment : slot3,doctor : result,search :1,status:"*Fill the Form to Fix Appoinment"});
+            
+             }//else
+           });//againg finding those 12 rows after insertion
+         }//else after inserting all 12 values
+       });//insert all the appointments
+     }//else
+   });//finding search in appointment
+  }//if for schedule
+
+  else if(req.query.form){
+    console.log(" reacvhed in form post --------------------------------------");
+   result = [{
+     "username" : req.query.username,
+     "name"     : req.query.name,
+     "profileimage" : req.query.profileimage
+   }];
+   console.log("doctor :",req.query.username);
+   console.log("slot :",req.body.slot);
+   console.log("date :",req.body.date);
+
+      var findemail = "select * from patient where username='"+req.body.patient+"' ";
+      con.query(findemail,function(err,patient,fields){
+         if(err){
+           console.log("err in finding patient",err);
+         }
+         else if(patient.length == 0){
+           console.log("Patient Not Found or Registered ");
+           res.render('appointment',{user:req.session.user,slot:req.body.slot,date:req.body.date,doctor : result,form:1,status:"*Patient Id '"+req.body.patient+"' Not Found or Registered !"});
+         }//elseif
+         else{
+          var fix = "update appointment set patient='"+req.body.patient+"',status='Fixed' where doctor='"+req.query.username+"' and date='"+req.body.date+"' and slot='"+req.body.slot+"'  ";
+
+          con.query(fix, function(err,fixed,fields) {
+           if (err){
+             console.log("error ocurrred",err);
+             res.render('appointment',{user:req.session.user,doctor : result,search :1,status:"*Schedule an Appoinment"});
+           }
+           else{
+             console.log("appomjtment is fixed: ",fixed);
+             mail.send_email(res,'',"Medical System","gadarsh780@gmail.com","zinfwpjphbywlekm",patient[0].email,"Medical System","Your Appointment is Fixed Successfully with Patient Id : '"+req.body.patient+"' at Time-Slot : '"+req.body.slot+"' , on Date : '"+req.body.date+"' . Your Doctor's Id is :  "+req.query.username+".",'','');
+             res.render('appointment',{user:req.session.user,slot:req.body.slot,date:req.body.date,doctor : result,form:1,patient:req.body.patient,email:"An Email is Sent To the Patient with All the Necessary Details.",status:"*Appoinment Fixed Successfully !!"});
+               }//else of fixing appointment
+          });//query to update patient in apooinrment
+
+         }//else of finding patient
+      });//query to find patient  
+
+  }//else if for form
+});//routert fopr date searching 
 
 function checkSignIn(req,res,next){
     if(req.session.user){

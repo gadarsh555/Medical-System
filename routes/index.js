@@ -174,10 +174,10 @@ router.post('/', upload.single('profileimage'),function(req, res, next) {
                     }
                     console.log("1 record inserted",result);
                     console.log("fields",fields);
-                    req.session.user = req.body;
+                    req.session.user = [req.body];
                     var user = [req.body];
                     /* res.render('docprofile',{user:user}); */
-                    res.redirect('/login/'+result[0].username+'/home?table=doctor');
+                    res.redirect('/login/'+user[0].username+'/home?table=doctor');
                   });//inserting data in db doctor
             }//else 
          })
@@ -265,10 +265,10 @@ router.post('/', upload.single('profileimage'),function(req, res, next) {
                     }
                     console.log("1 record inserted",result);
                     console.log("fields",fields);
-                    req.session.user = req.body;
+                    req.session.user = [req.body];
                     var user = [req.body];
                   /*   res.render('recprofile',{user:user}); */
-                  res.redirect('/login/'+result[0].username+'/home?table=receptionist');
+                  res.redirect('/login/'+user[0].username+'/home?table=receptionist');
                   });//inserting data in db doctor
             }//else 
          })
@@ -355,9 +355,9 @@ router.post('/', upload.single('profileimage'),function(req, res, next) {
                     }
                     console.log("1 record inserted",result);
                     console.log("fields",fields);
-                    req.session.user = req.body;
+                    req.session.user = [req.body];
                     var user = [req.body];
-                    res.redirect('/login/'+result[0].username+'/home?table=pharmacist');
+                    res.redirect('/login/'+user[0].username+'/home?table=pharmacist');
                    /*  res.render('pharprofile',{user:user}); */
                   });//inserting data in db doctor
             }//else 
