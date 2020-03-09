@@ -115,22 +115,45 @@ router.post('/:id/search',checkSignIn,function(err,req,res,next){
   res.redirect('/login');      
 },function(req,res){
   var item = req.body.search;
-  var search = "SELECT * FROM patient WHERE (username='"+item+"' or name='"+item+"' or email='"+item+"' or phone='"+item+"' or dob='"+item+"' )";
+  var search = "";
+  if(req.query.doctor){
+     console.log("inside doctor search",req.query.patient);
+     search = "SELECT * FROM patient WHERE username='"+req.query.patient+"' ";
+  }//query for doctor
+  else{
+    console.log("inside receptionist search");
+     search = "SELECT * FROM patient WHERE (username='"+item+"' or name='"+item+"' or email='"+item+"' or phone='"+item+"' or dob='"+item+"' )";
+  }//query for receptionist
   con.query(search, function (err, result,fields) {
     if (err){
       console.log("error ocurrred",err);
-      res.render('recprofile',{user:req.session.user,status:"*Error ocurred while searching for '"+item+"'  "});
+      if(req.query.doctor){
+        res.render('docprofile',{user:req.session.user,status:"*Error ocurred while Getting profile of '"+item+"'  "});
+      }//rendering to doctor
+      else{
+        res.render('recprofile',{user:req.session.user,status:"*Error ocurred while searching for '"+item+"'  "});
+      }//rendering to receptionist
     }
     else if(result.length > 0){
       console.log("found search reesult : ",result);
+      if(req.query.doctor){
+        res.render('patientprofile',{user:req.session.user,patient:result,doctor:1});
+      }//rendering to doctor
+      else{
       res.render('recprofile',{user:req.session.user,patient:result,status:"*Found patient's result related to '"+item+"' : "});
+       }//rendering to receptionist
     }//elseif
     else{
-      console.log("no result found ");
+      console.log("no result found ",result);
+      if(req.query.doctor){
+        res.render('docprofile',{user:req.session.user,status:"Profile Not Found !"});
+      }//rendering to doctor
+      else{
       res.render('recprofile',{user:req.session.user,status:"*Nothing found realted to '"+item+"' : "});
+      }//rendering to receptionist
     }//else
   });//finding search in patient
-});//router 
+});//router to search patient
 
 router.get('/:id/appointment',checkSignIn,function(err,req,res,next){
   console.log("i am inside appointment get");
@@ -196,11 +219,21 @@ router.post('/:id/appointment',checkSignIn,function(err,req,res,next){
    con.query(find, function (err,slot,fields) {
      if (err){
        console.log("error ocurrred",err);
+       if(req.query.doctor){
+        res.render('docprofile',{user:req.session.user,status:"*Error in getting Appoinment"});
+       }//rendering to doctor
+       else{
        res.render('appointment',{user:req.session.user,doctor : result,search :1,status:"*Schedule an Appoinment"});
+       }//rendering to receptionist
      }
      else if(slot.length == 12){
        console.log("found search reesult already present: ",slot);
+       if(req.query.doctor){
+        res.render('docprofile',{user:req.session.user,appointment : slot,status:"*Appoinments for the Date :"+req.body.date+" : "});
+       }//rendering to doctor
+       else{
        res.render('appointment',{user:req.session.user,appointment : slot,doctor : result,search :1,status:"*Fill the Form to Fix Appoinment"});
+        }//rendering to receptionist
      }//elseif
      else{
        console.log("no result found ");
@@ -208,7 +241,12 @@ router.post('/:id/appointment',checkSignIn,function(err,req,res,next){
        con.query(insert, function (err, slot2,fields) {
          if (err){
            console.log("error ocurrred in inserting 12 rows",err);
-           res.render('appointment',{user:req.session.user,doctor : result,search :1,status:"*Schedule an Appoinment"});
+           if(req.query.doctor){
+            res.render('docprofile',{user:req.session.user,status:"*Error in getting Appoinment"});
+           }//rendering to doctor
+           else{
+            res.render('appointment',{user:req.session.user,doctor : result,search :1,status:"*Schedule an Appoinment"});
+           }//rendering to receptionist
          }
          else{
            console.log("12 rows insertrted succcessfully !");
@@ -216,12 +254,21 @@ router.post('/:id/appointment',checkSignIn,function(err,req,res,next){
            con.query(find2, function (err,slot3,fields) {
              if (err){
                console.log("error ocurrred",err);
+               if(req.query.doctor){
+                res.render('docprofile',{user:req.session.user,status:"*Error in getting Appoinment"});
+               }//rendering to doctor
+               else{
                res.render('appointment',{user:req.session.user,doctor : result,search :1,status:"*Schedule an Appoinment"});
+               }//rendering to receptionist
              }
              else {
                console.log("found search reesult--------------------- : ",slot3);
+               if(req.query.doctor){
+                res.render('docprofile',{user:req.session.user,appointment : slot3,status:"*Appoinments for the Date :"+req.body.date+" : "});
+               }//rendering to doctor
+               else{
                res.render('appointment',{user:req.session.user,appointment : slot3,doctor : result,search :1,status:"*Fill the Form to Fix Appoinment"});
-            
+                }//rendering to receptionist
              }//else
            });//againg finding those 12 rows after insertion
          }//else after inserting all 12 values
