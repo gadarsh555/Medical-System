@@ -208,6 +208,62 @@ router.get('/:id/bill',checkSignIn,function(err,req,res,next){
    
 });//router to finally complete payment
 
+router.get('/:id/inventory',checkSignIn,function(err,req,res,next){
+  console.log("i am inside get inventory ");
+  console.log("error : ",err);
+  res.redirect('/login');
+},function(req,res){
+   var inventory="select * from inventory ";
+   con.query(inventory, function (err,inventory,fields) {
+    if(err){
+      console.log("error ",err);
+    }
+    else{
+     console.log("got the inventory",inventory);
+     var status = req.query.status;
+     var warning = [];
+     for(var i=0,j=0;i<inventory.length;i++){
+       if(inventory[i].quantity < 30){
+          warning[j] = "Medicine "+inventory[i].medicine+" is less than 30 Units.";
+          j++;
+       }//if 
+     }//for
+     res.render('inventory',{user:req.session.user,status:status,warning:warning,inventory:inventory});
+    }//else quantity is updated
+  });//query to update inventory
+});///router to get the inventory details
+
+router.post('/:id/inventory',checkSignIn,function(err,req,res,next){
+  console.log("i am inside get inventory ");
+  console.log("error : ",err);
+  res.redirect('/login');
+},function(req,res){
+    var status = "";
+    var query  = "";
+    if(req.query.action == "add"){
+       query = "insert into inventory values('"+req.body.medicine+"','"+req.body.quantity+"','"+req.body.price+"')";
+       status = "Medicine Added Successfully !";
+    }//add data in inventory
+    else if(req.query.action == "update"){
+      query = "update inventory set quantity="+req.body.quantity+",price="+req.body.price+" where medicine='"+req.body.medicine+"' ";
+      status = "Medicine details Updated Successfully !";
+    }//add data in inventory
+    else if(req.query.action == "delete"){
+       query = "delete from inventory where medicine='"+req.body.medicine+"' ";
+      status = "Medicine Deleted Successfully !";
+    }//add data in inventory
+    
+    con.query(query, function (err,inventory,fields) {
+      if(err){
+        console.log("error ",err);
+      }
+      else{
+       console.log("operated on the inventory",inventory);
+       res.redirect('/login/'+req.session.username+'/inventory?status='+status+'');
+      }//else quantity is updated
+    });//query to update inventory
+});///router to operate on the the inventory details
+
 function checkSignIn(req,res,next){
     if(req.session.user){
        next();     //If session exists, proceed to page

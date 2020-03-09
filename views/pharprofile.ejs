@@ -177,8 +177,7 @@ footer, #portfolio {
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/login/<%= user[0].username %>/home?table=pharmacist">Home</a></li>
-            <li> <a href="/login/<%= user[0].username %>/register">Register Patient</a></li>
-            <li><a href="#portfolio">Fix Appointement</a></li>
+            <li><a href="/login/<%= user[0].username %>/inventory">Inventory</a></li>
             <li> <a href="/login/<%= user[0].username %>/change?table=pharmacist">Change Password</a></li>
             <% if(user){%>
               <li> <a href="/login/<%= user[0].username %>/logout">Logout&nbsp;&nbsp;(<%= user[0].username %>)</a></li>
