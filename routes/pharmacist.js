@@ -10,7 +10,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var expressValidator = require('express-validator');
 var con = require('/home/adarsh/node_projects/Medical/routes/connection');
-
+var mail = require('easy-email');
 
 //handle sessions
 router.use(session({
@@ -188,7 +188,17 @@ router.get('/:id/bill',checkSignIn,function(err,req,res,next){
                       console.log("bill inserted successfully",billdata);
                       var status = [];
                       status[0] = "Bill Payment was Successfully recorded and Inventory updated,an email is sent to the patient with all the bill details.";
-                      res.render('medicine',{status:status,user:req.session.user,reference:bill.reference,medicine:bill.medicine,price:bill.price,total:bill.total,quantity:bill.quantity,date:bill.date,doctor:bill.doctor,patient:bill.patient,billstatus:1});
+                      var email = "select * from patient where username='"+bill.patient+"'  ";
+                      con.query(email, function (err,patient,fields) {
+                        if(err){
+                          console.log("error ",err);
+                        }
+                        else{
+                          mail.send_email(res,'',"Medical System","gadarsh780@gmail.com","zinfwpjphbywlekm",patient[0].email,"Medical System","Your Bill is Paid Successfully. The details Related to the Bill are : Reference Number : "+bill.reference+" \n Doctor Id : "+bill.doctor+" \n Patient Id : "+bill.patient+" \n Date : "+bill.date+" \n Total Amount Paid : "+bill.total+" .",'','');
+                          res.render('medicine',{status:status,user:req.session.user,reference:bill.reference,medicine:bill.medicine,price:bill.price,total:bill.total,quantity:bill.quantity,date:bill.date,doctor:bill.doctor,patient:bill.patient,billstatus:1});
+                        }//else email is found
+                      });//query to send email and confirm payment
+                      
                     }//else bill is inserted
                   });//query to insert bill 
                })//then

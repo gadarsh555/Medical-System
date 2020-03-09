@@ -3,7 +3,7 @@ var mysql = require("mysql");
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "ucantcme",
     database: 'medical'
   });
   
@@ -13,3 +13,4 @@ var con = mysql.createConnection({
   });
 
   module.exports = con;
+
