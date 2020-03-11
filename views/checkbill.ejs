@@ -1,4 +1,4 @@
-<% var user,status,treatment; %>
+<% var user,status,bill; %>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -94,7 +94,6 @@ font-weight: bold;
 }
 
 
-
 hr.star-primary {
     margin: 25px auto 30px;
     padding: 0 0 30px 0; /* samo bottom ima padding */
@@ -178,7 +177,6 @@ footer, #portfolio {
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/login/<%= user[0].username %>/home?table=pharmacist">Home</a></li>
             <li><a href="/login/<%= user[0].username %>/inventory">Inventory</a></li>
-            <li><a href="/login/<%= user[0].username %>/checkbill">Check Bill</a></li>
             <li> <a href="/login/<%= user[0].username %>/change?table=pharmacist">Change Password</a></li>
             <% if(user){%>
               <li> <a href="/login/<%= user[0].username %>/logout">Logout&nbsp;&nbsp;(<%= user[0].username %>)</a></li>
@@ -201,88 +199,60 @@ footer, #portfolio {
         <% if(status){ %>
           <h3 style="margin-top:2%;margin-left:26%;color: darkred;font-weight: 500;"><%= status %> </h3>
         <% } %>
-        <div class="col-sm-8" style="margin-top:3%;margin-left: 3%;">
-          <form action="/login/<%= user[0].username %>/pharmacist/search" method="get">
+           <!-- form  -->
+           <div class="col-sm-8"  style="margin: 2%;margin-bottom:3%;">
+            <!-- seearch bill -->
+           <form class="form" method="POST" action="/login/<%= user[0].username %>/checkbill" style=" border: 1px solid gray ;padding:26px;">
             <div class="form-group">
-              <label >Enter Date to Check the Treatments :</label>
-              <input type="date" name="date" class="form-control" id="exampleInputEmail1">
+              <label>Search bills with respect to Patient-Id or Doctor-Id or Date or Bill Reference Number or Price on the bills : </label>
+              <input type="text" name="search" class="form-control" id="email">
             </div>
-            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit"  class="btn btn-primary">Search</button>
           </form>
-        </div>
-         <!-- doctor's previous appointment-->
-         <div class="col-sm-9" style="margin:1%;">
-          <% if(treatment){ %>
-            <div class="row" style="border-bottom:2px solid gray;">
-                
-               <div class="col-sm-2">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Doctor Id 
+          <!-- seearch bill -->
+       
+         
+          <% if(bill){ %>
+            <h3 style="margin-top:2%;color:darkblue;font-weight: 500;margin:20px;padding:5px;">Bills :</h3>
+            <div class="row" style="border-bottom:2px solid gray;margin:5px;padding:5px;font-weight: 900;">
+               <div class="col-sm-4">
+               Reference Number 
                </div>
                <div class="col-sm-2">
-                &nbsp;&nbsp;&nbsp; Patient Id
+               Doctor-Id 
                </div>
                <div class="col-sm-2">
-                &nbsp;&nbsp; Date
+               Patient-Id 
                </div>
                <div class="col-sm-2">
-                Type
+               Date 
                </div>
-               <div class="col-sm-2">
-                Medicine
-               </div>
-               <div class="col-sm-2">
-               Treatment Status
-               </div>
+                <div class="col-sm-2">
+                Price
+                </div>
             </div>
-               <% for(var i=0;i<treatment.length;i++){ %>
+               <% for(var i=0;i<bill.length;i++){ %>
                 <div class="row" style="border-bottom:2px solid gray;margin:5px;padding:5px;">
-                   <div class="col-sm-2">
-                  *&nbsp; <%= treatment[i].doctor %>
+                   <div class="col-sm-4">
+                    <%= bill[i].reference %>
                    </div>
                    <div class="col-sm-2">
-                    <% if(treatment[i].patient) { %>
-                      <form action="/login/<%= user[0].username %>/search?doctor=1&patient=<%= treatment[i].patient %>" method="post">
-                        <div class="row" style="margin-left:10px;">
-                       <!--  <a href=""> -->
-                        <%= treatment[i].patient %>
-                        <!-- </a> -->
-                        </div>
-                        <div class="row" style="margin-top:5px;">
-                         <button type="submit" class="btn- btn-primary">Visit Porfile</button>
-                        </div>
-                      </form>
-                    <% } %>
-                    <% if(!treatment[i].patient) { %>
-                       Not Appointed
-                      <% } %>
-                     </div>
-                   <div class="col-sm-2">
-                    <%= treatment[i].date %>
+                    <%= bill[i].doctor %>
                    </div>
-                   <div class="col-sm-2">
-                    <%= treatment[i].type %>
+                   <div class="col-sm-2" >
+                    <%= bill[i].patient %>
                    </div>
-                   <div class="col-sm-2">
-                    <%= treatment[i].medicine %>
-                    <% if(treatment[i].type == "Medication") {%>
-                      <div class="row" style="margin-top:5px;">
-                          <button class="btn btn-primary">
-                            <a href="/login/<%= user[0].username %>/medicine?medicine=<%= treatment[i].medicine %>&date=<%= treatment[i].date %>&doctor=<%= treatment[i].doctor %>&patient=<%= treatment[i].patient %>" style="color: white;">
-                            Provide Medicines
-                            </a>
-                          </button>
-                      </div>
-                     <% } %>
+                   <div class="col-sm-2" >
+                    <%= bill[i].date %>
                    </div>
-                   <div class="col-sm-2"  <% if(treatment[i].status == "yes") {%> style="color:darkgreen" <% } %> >
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <%= treatment[i].status %>
+                   <div class="col-sm-2" >
+                    <%= bill[i].total %>
                    </div>
                 </div>
                <% } %>
-            
             <% } %>
       </div>
-        <!-- doctor's previous appointment-->
+        <!-- showing inventory-->
   </body>
 </html>
+

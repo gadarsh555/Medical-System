@@ -264,6 +264,48 @@ router.post('/:id/inventory',checkSignIn,function(err,req,res,next){
     });//query to update inventory
 });///router to operate on the the inventory details
 
+router.get('/:id/checkbill',checkSignIn,function(err,req,res,next){
+  console.log("i am inside get checkbill ");
+  console.log("error : ",err);
+  res.redirect('/login');
+},function(req,res){
+    var bill = "select * from bill";
+    con.query(bill, function (err,bill,fields) {
+      if(err){
+        console.log("error ",err);
+      }
+      else{
+       console.log("got the bills",bill);
+       var status = "";
+       res.render('checkbill',{user:req.session.user,status:status,bill:bill});
+      }//else check bill
+    });//query to check bill
+});//router to check bill
+
+router.post('/:id/checkbill',checkSignIn,function(err,req,res,next){
+  console.log("i am inside get checkbill ");
+  console.log("error : ",err);
+  res.redirect('/login');
+},function(req,res){
+  console.log("i am inside get checkbill post ");
+    var bill = "select * from bill where reference='"+req.body.search+"' or doctor='"+req.body.search+"' or patient='"+req.body.search+"' or date='"+req.body.search+"' or total='"+req.body.search+"' ";
+    con.query(bill, function (err,bill,fields) {
+      if(err){
+        console.log("error ",err);
+      }
+      else if(bill.length == 0){
+        console.log("no  bills",bill);
+        var status = "No Bills found related to the search '"+req.body.search+"' . ";
+        res.render('checkbill',{user:req.session.user,status:status});
+      }//else if check bill not found
+      else{
+       console.log("got the bills",bill);
+       var status = "Bills found related to the search '"+req.body.search+"' are : ";
+       res.render('checkbill',{user:req.session.user,status:status,bill:bill});
+      }//else check bill found
+    });//query to check bill
+});//router to check bill
+
 function checkSignIn(req,res,next){
     if(req.session.user){
        next();     //If session exists, proceed to page
